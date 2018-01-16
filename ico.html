@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WorldCoin ICO Admin</title>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="web3.min.js"></script>
+    <script type="text/javascript" src="ico.js"></script>
+    <link rel="stylesheet" href="style.css" type='text/css'/>
+</head>
+<body>
+<h1>WorldCoin ICO Admin</h1>
+<div class="error" id="errormsg"></div>
+<h2>0. Load contracts</h2>
+<form id="loadContractsForm">
+    <label>Token ABI:
+        <textarea id="tokenABI" readonly class="abi"></textarea>
+    </label>
+    <label>Crowdsale ABI:
+        <textarea id="crowdsaleABI" readonly  class="abi"></textarea>
+    </label>
+    <label>PartnerCrowdsale ABI:
+        <textarea id="partnerCrowdsaleABI" readonly  class="abi"></textarea>
+    </label>
+    <label>NationalCoin ABI:
+        <textarea id="nationalCoinABI" readonly  class="abi"></textarea>
+    </label>
+    <input type="button" id="loadContractsBtn" value="Load contracts">
+</form>
+
+
+<h2>1. Publish Crowdsale</h2>
+<form id="publishContractsForm">
+    <div>Current time: <input type="text" id="clock" name="clock" value="" readonly class="time"> (Z = UTC timezone, ISO8601 format)</div>
+    <table id="crowdsaleRoundsForm">
+        <thead><tr>
+            <th>Round</th>
+            <th>Start time</th>
+            <th>End time</th>
+            <th>Rate (WCN per ETH)</th>
+        </tr></thead>
+        <tbody></tbody>
+    </table>
+    <table>
+        <thead><tr>
+            <th>Param</th>
+            <th>Value</th>
+            <th></th>
+        </tr></thead>
+        <tbody>
+            <tr><td>Founder tokens:</td><td><input type="text" name="ownerBonus" value="" class="number"></td><td>%</td></tr>
+            <tr><td>Partner tokens:</td><td><input type="text" name="partnerBonus" value="" class="number"></td><td>%</td></tr>
+            <tr><td>Referral tokens:</td><td><input type="text" name="referralBonus" value="" class="number"></td><td>%</td></tr>
+            <tr><td>Hard Cap:</td><td><input type="text" name="hardCap" value="" class="number"></td><td>WCN</td></tr>
+        </tbody>
+    </table>
+    <div><input type="button" id="publishContracts" value="Publish"></div>
+    <div><label>Transaction: <input type="text" readonly name="publishedTx" value="" class="ethTx"></label></div>
+    <div><label>Crowdsale Published at: <input type="text" readonly name="publishedAddress" value="" class="ethAddress"></label></div>
+    <div><label>Token Published at: <input type="text" readonly name="tokenAddress" value="" class="ethAddress"></label></div>
+</form>
+<h2>2. Publish Partner Crowdsale</h2>
+<form id="publishPartnerCrowdsaleForm">
+    <div><label>Crowdsale at: <input type="text" name="crowdsaleAddress" value="" class="ethAddress"></label></div>
+    <div><label>Partner: <input type="text" name="partnerAddress" value="" class="ethAddress"></label></div>
+    <div><input type="button" id="publishPartnerCrowdsale" value="Publish"></div>
+    <div><label>Transaction: <input type="text" readonly name="publishedTx" value="" class="ethTx"></label></div>
+    <div><label>Partner Crowdsale Published at: <input type="text" readonly name="publishedAddress" value="" class="ethAddress"></label></div>
+</form>
+
+<h2>3. Manage Crowdsale </h2>
+<form id="manageCrowdsale">
+    <div><label>Crowdsale at: <input type="text" name="crowdsaleAddress" value="" class="ethAddress"></label></div>
+    <div><input type="button" id="loadCrowdsaleInfo" value="Load info"></div>
+    <table id="crowdsaleRoundsInfo">
+        <thead><tr>
+            <th>Round</th>
+            <th>Start time</th>
+            <th>End time</th>
+            <th>Rate</th>
+            <th></th>
+        </tr></thead>
+        <tbody></tbody>
+    </table>
+    <div>Owner: <input type="text" readonly name="owner" value="" class="ethAddress"></div>
+    <table>
+        <tr><td>Founder tokens:</td><td><input type="text" readonly name="ownerBonus" value="" class="number"></td><td>%</td></tr>
+        <tr><td>Partner tokens:</td><td><input type="text" readonly name="partnerBonus" value="" class="number"></td><td>%</td></tr>
+        <tr><td>Referral tokens:</td><td><input type="text" readonly name="referralBonus" value="" class="number"></td><td>%</td></tr>
+        <tr><td>Tokens minted:</td><td><input type="text" readonly name="tokensMinted" readonly value="" class="number"></td><td>WCN  </td></tr>
+        <tr><td>Total tokens:</td><td><input type="text" readonly name="totalTokens" readonly value="" class="number"></td><td>WCN  </td></tr>
+        <tr><td>Total collected:</td><td><input type="text" readonly name="totalCollected" readonly value="" class="number"></td><td>ETH</td></tr>
+        <tr><td>Hard Cap:</td><td><input type="text" name="hardCap" readonly value="" class="number"></td><td>WCN</td></tr>
+        <tr><td>Current balance:</td><td><input type="text" name="balance" readonly value="" class="number"></td><td>ETH</td></tr>
+        <tr><td>Current round:</td><td><input type="text" name="currentRoundNum" readonly value="" class="number"></td><td></td></tr>
+        <tr><td>Current rate:</td><td><input type="text" name="currentRate" readonly value="" class="number"></td><td>WCN = 1 ETH</td></tr>
+        <tr><td>Is running:</td><td><input type="text" name="crowdsaleRunning" readonly value="" class=""></td><td></td></tr>
+        <tr><td>Is finalized:</td><td><input type="text" name="crowdsaleFinalized" readonly value="" class=""></td><td></td></tr>
+    </table>
+    <div><label>Token at: <input type="text" name="tokenAddress" readonly value="" class="ethAddress"></label></div>
+    <div><input type="button" id="crowdsaleClaim" value="Claim Ether"> Transfer collected Ether from the contract to your wallet</div>
+    <div><input type="button" id="crowdsaleFinalize" value="Finalize"> Finalize crowdsale: finish token minting, allow token transfer, change token ownership to yourself</div>
+    <h3>Non-Ether Sale</h3>
+    <div>Beneficiary: <input type="text" name="beneficiary" value="" class="ethAddress"></div>
+    <div>Amount: <input type="text" name="amount" value="" class="number"> WCN</div>
+    <div>Message: <input type="text" name="message" value="" class=""> <small>(reason, why are you sending this tokens: bank transaction reference, other coin transaction id... For example: <i>BTC: 4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b</i>)</small></div>
+    <div><input type="button" id="nonEtherSaleMint" value="Mint tokens"></div>
+</form>
+
+<h2>4. Publish National Coin</h2>
+<form id="publishNationalCoinForm">
+    <table>
+        <tr><td>Name:</td><td><input type="text" name="name" value="" class=""></td></tr>
+        <tr><td>Symbol:</td><td><input type="text" name="symbol" value="" class=""></td></tr>
+    </table>
+    <div><input type="button" id="publishNationalCoin" value="Publish"></div>
+    <div><label>Transaction: <input type="text" readonly name="publishedTx" value="" class="ethTx"></label></div>
+    <div><label>Token Published at: <input type="text" readonly name="publishedAddress" value="" class="ethAddress"></label></div>
+</form>
+<h2>5. Manage National Coin</h2>
+<form id="manageNationalCoinForm">
+    <div><label>National Coin at: <input type="text" name="nationalCoinAddress" value="" class="ethAddress"></label></div>
+    <div><input type="button" id="loadNationalCoinInfo" value="Load info"></div>
+    <table>
+        <tr><td>Name:</td><td><input type="text" readonly name="name" value="" class=""></td></tr>
+        <tr><td>Symbol:</td><td><input type="text" readonly name="symbol" value="" class=""></td></tr>
+        <tr><td>Total Suppy:</td><td><input type="text" readonly name="totalSupply" value="" class="number"> coins</td></tr>
+        <tr><td>Amount:</td><td><input type="text" name="amount" value="" class="number"> coins</td></tr>
+        <tr><td>Proof URL:</td><td><input type="text" name="proofUrl" value="" class="url"></td><td><input type="button" id="generateProofHash" value="Generate hash"></td></tr>
+        <tr><td>Proof hash:</td><td><input type="text" name="proofHash" value="" class="sha3"></td><td></td></tr>
+    </table>
+    <div><input type="button" id="mintNationalCoin" value="Mint"> Create new coins after fiat deposit is received</div>
+    <div><input type="button" id="burnNationalCoin" value="Burn"> Burn received coins after sending fiat</div>
+</form>
+
+</body>
+</html>
+

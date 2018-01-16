@@ -1,0 +1,15 @@
+==== TESTCOIN MINT PROOF START ====
+Coin: TestCoin
+Depositary bank name: National Test Bank
+Depositary bank SWIFT: TESTNATT
+Depositary account: 123450000000006789
+Sender bank name: Other Test Bank
+Sender bank SWIFT: OTHENATT
+Sender account: 987650000000004321
+Deposit Currency: USD
+Deposit Amount: 10000
+Transaction identifier: NT945095-0635830-00000-549-1
+Previous deposit value: 12975891 NCN
+Current deposit value:  13467765 NCN
+Coins to mint: 491874
+====  TESTCOIN MINT PROOF END  ====
